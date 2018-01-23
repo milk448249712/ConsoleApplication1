@@ -29,5 +29,8 @@
     <ClCompile Include="ConsoleFileTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="libev_http.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
