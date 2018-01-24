@@ -1,13 +1,18 @@
 #include "stdafx.h"
 #include <iostream>
 #include <winsock2.h>
+#include<string>
 #include <WS2tcpip.h>
 #include <event2/event.h>
 #include <event2/buffer.h>
 #include <event2/http.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fstream>
+#include <assert.h>
+#include <strstream>
 #pragma comment(lib,"ws2_32.lib")
+using namespace std;
 
 int init_win_socket()
 {
@@ -17,6 +22,20 @@ int init_win_socket()
 		return -1;
 	}
 	return 0;
+}
+
+string readHtml(string htmlFile) {
+	ifstream infile;
+	string htmlLine;
+	string html;
+	infile.open(htmlFile.data());
+	//cout << "456" << endl;
+	while (getline(infile, htmlLine)) {
+		//cout << htmlLine;
+		//cout << "123" << endl;
+		html += htmlLine;
+	}
+	return html;
 }
 
 void generic_handler(struct evhttp_request *req, void *arg)
@@ -29,7 +48,13 @@ void generic_handler(struct evhttp_request *req, void *arg)
 	}
 
 	evbuffer_add_printf(buf, "Server Responsed. Requested: %s\n", evhttp_request_get_uri(req));
-	evbuffer_add_printf(buf, "<input>edit something</>");
+	//evbuffer_add_printf(buf, "<input>edit something</>");
+	string html = readHtml("index.html");
+	//string html = readHtml("D:\\vs_source\\ConsoleApplication1\\Debug\\test.txt");
+	//string html = readHtml(".\\test.txt");
+	//printf("hello\n");
+	printf("%s\n", html.c_str());
+	evbuffer_add_printf(buf, html.c_str());
 	evhttp_send_reply(req, HTTP_OK, "OK", buf);
 	evbuffer_free(buf);
 }
